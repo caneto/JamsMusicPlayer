@@ -370,7 +370,7 @@ public class VelocityLinePageIndicator extends View implements VelocityPageIndic
                 result = Math.min(result, specSize);
             }
         }
-        return (int)FloatMath.ceil(result);
+        return (int)Math.ceil(result);
     }
 
     /**
@@ -396,7 +396,7 @@ public class VelocityLinePageIndicator extends View implements VelocityPageIndic
                 result = Math.min(result, specSize);
             }
         }
-        return (int)FloatMath.ceil(result);
+        return (int)Math.ceil(result);
     }
 
     @Override

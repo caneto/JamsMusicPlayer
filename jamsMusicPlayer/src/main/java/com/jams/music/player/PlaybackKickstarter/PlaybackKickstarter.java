@@ -161,14 +161,6 @@ public class PlaybackKickstarter implements NowPlayingActivityListener, PrepareS
 
 		@Override
 		protected Cursor doInBackground(Boolean... params) {
-			
-/*			try {
-
-			} catch (Exception exception) {
-				exception.printStackTrace();
-				publishProgress(new String[] { exception.getMessage() });
-				return null;
-			}*/
 
             if (mPlaybackRouteId==Common.PLAY_ALL_IN_FOLDER)
                 //Return a cursor directly from MediaStore.

@@ -198,7 +198,8 @@ public class VelocityScroller {
     public float getCurrVelocity() {
         float squaredNorm = mScrollerX.mCurrVelocity * mScrollerX.mCurrVelocity;
         squaredNorm += mScrollerY.mCurrVelocity * mScrollerY.mCurrVelocity;
-        return FloatMath.sqrt(squaredNorm);
+        double result = Math.sqrt(squaredNorm);
+        return (float)result;
     }
 
     /**

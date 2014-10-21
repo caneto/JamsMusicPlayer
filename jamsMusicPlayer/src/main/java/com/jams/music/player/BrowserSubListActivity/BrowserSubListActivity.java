@@ -373,6 +373,7 @@ public class BrowserSubListActivity extends FragmentActivity {
                 case Common.ARTISTS_FLIPPED_SONGS_FRAGMENT:
                 case Common.ALBUM_ARTISTS_FLIPPED_SONGS_FRAGMENT:
                 case Common.GENRES_FLIPPED_FRAGMENT:
+                case Common.ALBUMS_FLIPPED_FRAGMENT:
                     playbackRouteId = Common.PLAY_ALL_BY_ALBUM;
                     break;
             }

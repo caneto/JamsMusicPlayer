@@ -765,6 +765,7 @@ public class DBAccessHelper extends SQLiteOpenHelper {
     	case Common.ALBUMS_FRAGMENT:
     		return getAllUniqueAlbums(querySelection);
     	case Common.SONGS_FRAGMENT:
+            querySelection += " ORDER BY " + SONG_TITLE + " ASC";
     		return getAllSongsSearchable(querySelection);
     	case Common.PLAYLISTS_FRAGMENT:
             //TODO case stub.
@@ -806,6 +807,7 @@ public class DBAccessHelper extends SQLiteOpenHelper {
     	case Common.ALBUMS_FRAGMENT:
     		return getAllUniqueAlbumsInLibrary(querySelection);
     	case Common.SONGS_FRAGMENT:
+            querySelection += " ORDER BY " + SONG_TITLE + " ASC";
     		return getAllSongsInLibrarySearchable(querySelection);
     	case Common.PLAYLISTS_FRAGMENT:
     		//TODO case stub.
@@ -890,16 +892,19 @@ public class DBAccessHelper extends SQLiteOpenHelper {
             case Common.PLAY_ALL_BY_ARTIST:
             case Common.PLAY_ALL_BY_ALBUM_ARTIST:
             case Common.PLAY_ALL_BY_ALBUM:
-            case Common.PLAY_ALL_SONGS:
             case Common.PLAY_ALL_IN_GENRE:
-                return getAllSongsSearchable(querySelection);
-            case Common.PLAY_ALL_IN_PLAYLIST:
             case Common.PLAY_ALL_IN_FOLDER:
-                //TODO
-            default:
-                return null;
+                querySelection +=  " ORDER BY " + SONG_TRACK_NUMBER + "*1 ASC";
+                break;
+            case Common.PLAY_ALL_SONGS:
+                querySelection +=  " ORDER BY " + SONG_TITLE + " ASC";
+                break;
+            case Common.PLAY_ALL_IN_PLAYLIST:
+                //TODO Must order the cursor by the order of the playlist's track arrangement.
+
         }
 
+        return getAllSongsSearchable(querySelection);
     }
 
     /**
@@ -912,17 +917,23 @@ public class DBAccessHelper extends SQLiteOpenHelper {
             case Common.PLAY_ALL_BY_ARTIST:
             case Common.PLAY_ALL_BY_ALBUM_ARTIST:
             case Common.PLAY_ALL_BY_ALBUM:
-            case Common.PLAY_ALL_SONGS:
             case Common.PLAY_ALL_IN_GENRE:
-                return getAllSongsInLibrarySearchable(querySelection);
-            case Common.PLAY_ALL_IN_PLAYLIST:
             case Common.PLAY_ALL_IN_FOLDER:
-                //TODO
-            default:
-                return null;
+                querySelection += " ORDER BY " + MUSIC_LIBRARY_TABLE + "." + SONG_TRACK_NUMBER + "*1 ASC";
+                break;
+            case Common.PLAY_ALL_SONGS:
+                querySelection += " ORDER BY " + MUSIC_LIBRARY_TABLE + "." + SONG_TITLE + " ASC";
+                break;
+            case Common.PLAY_ALL_IN_PLAYLIST:
+                //TODO Must order the cursor by the order of the playlist's track arrangement.
         }
 
+        return getAllSongsInLibrarySearchable(querySelection);
     }
+
+    /**
+     * Returns a cursor of songs sorted by their track number. Used for
+     */
     
     /**
      * Returns a selection cursor of all unique artists.
@@ -1106,8 +1117,7 @@ public class DBAccessHelper extends SQLiteOpenHelper {
      */
     public Cursor getAllSongsSearchable(String selection) {
         String selectQuery = "SELECT  * FROM " +  MUSIC_LIBRARY_TABLE + " WHERE " +
-        					 BLACKLIST_STATUS + "=" + "'0'" + selection + " ORDER BY " + 
-        					 SONG_TITLE + " ASC";
+        					 BLACKLIST_STATUS + "=" + "'0'" + selection;
 
         return getDatabase().rawQuery(selectQuery, null);
     }
@@ -1122,8 +1132,7 @@ public class DBAccessHelper extends SQLiteOpenHelper {
 							  + " INNER JOIN " + LIBRARY_NAME + " ON (" 
 							  + MUSIC_LIBRARY_TABLE + "." + _ID + "=" + LIBRARY_NAME + "." 
 							  + SONG_ID + ") WHERE " + MUSIC_LIBRARY_TABLE + "." + 
-							  BLACKLIST_STATUS + "=" + "'" + "0" + "'" + selection + " ORDER BY " 
-							  + MUSIC_LIBRARY_TABLE + "." + SONG_TITLE + " ASC" ;
+							  BLACKLIST_STATUS + "=" + "'" + "0" + "'" + selection;
     	
         return getDatabase().rawQuery(selectQuery, null);
     }
