@@ -28,7 +28,19 @@
 	        android:layout_width="320dp"
 	        android:layout_height="match_parent"
 	        android:layout_gravity="end" />
-		
+
+		<!-- Listview to display slider menu -->
+		<ListView
+			android:id="@+id/list_drawer_Items"
+			android:layout_width="240dp"
+			android:layout_height="match_parent"
+			android:layout_gravity="start"
+			android:choiceMode="singleChoice"
+			android:divider="@color/holo_green_light"
+			android:dividerHeight="1dp"
+			android:listSelector="@drawable/list_selector"
+			android:background="@color/black"/>
+
 	    <RelativeLayout
 	        android:id="@+id/nav_drawer_container"
 	        android:layout_width="240dp"

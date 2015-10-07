@@ -15,6 +15,9 @@
  */
 package com.jams.music.player.MainActivity;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,6 +32,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.widget.ListView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -78,7 +82,8 @@ public class MainActivity extends FragmentActivity {
     public static final String FRAGMENT_HEADER = "FragmentHeader";
 	public static final int LIST_LAYOUT = 0;
 	public static final int GRID_LAYOUT = 1;
-	
+
+	private String[] navMenuTitles;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -87,8 +92,8 @@ public class MainActivity extends FragmentActivity {
         mApp = (Common) getApplicationContext();
         
         //Set the theme and inflate the layout.
-        setTheme();
-        super.onCreate(savedInstanceState);
+		setTheme();
+		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
         //Init the UI elements.
@@ -96,6 +101,21 @@ public class MainActivity extends FragmentActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_activity_drawer_root);
         mNavDrawerLayout = (RelativeLayout) findViewById(R.id.nav_drawer_container);
         mCurrentQueueDrawerLayout = (RelativeLayout) findViewById(R.id.current_queue_drawer_container);
+
+		// load slide menu items
+		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+		ListView navDrawerListView = (ListView)findViewById(R.id.list_drawer_Items);
+
+		ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<NavDrawerItem>();
+
+		// adding nav drawer items to array
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], 0));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], 0));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], 0));
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], 0));
+
+		NavDrawerListAdapter adapter = new NavDrawerListAdapter(mContext, navDrawerItems);
+		navDrawerListView.setAdapter(adapter);
 
         //Load the drawer fragments.
         loadDrawerFragments();
