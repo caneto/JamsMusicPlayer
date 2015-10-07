@@ -261,9 +261,9 @@ public class LauncherActivity extends FragmentActivity {
 		try {
 			if (mApp.isGoogleAnalyticsEnabled()==true) {
 				EasyTracker easyTracker = EasyTracker.getInstance(this);
-		    	easyTracker.send(MapBuilder.createEvent("Jams startup.",     // Event category (required)
-			                   						  	"User started Jams.",  // Event action (required)
-			                   						  	"User started Jams.",   // Event label
+		    	easyTracker.send(MapBuilder.createEvent("Genesis Music startup.",     // Event category (required)
+			                   						  	"User started Genesis Music.",  // Event action (required)
+			                   						  	"User started Genesis Music.",   // Event label
 			                   						  	null)            // Event value
 						   .build());
 			}

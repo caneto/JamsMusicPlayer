@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Jams</string>
+    <string name="app_name">Genesis Player</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -698,9 +698,9 @@
     <string name="is_now_default_folder">is now your default folder for Folders view.</string>
     <string name="htc_devices">HTC Devices</string>
     <string name="htc_devices_equalizer_issue">If you are using an HTC device and your volume controls are stuck at max, go to Settings > Equalizer and tap \"Disable\". This is a known issue with the API and is currently being fixed by Google.</string>
-    <string name="jams_is_building_library">Jams is building your library.</string>
+    <string name="jams_is_building_library">Genesis Music is building your library.</string>
     <string name="jams_is_building_library_info">Feel free to close the app during this process. Swipe down your notification drawer at any time to check the current progress.</string>
-    <string name="jams_is_caching_artwork">Jams is caching album art.</string>
+    <string name="jams_is_caching_artwork">Genesis Music is caching album art.</string>
     <string name="on_this_device">On This Device</string>
     <string name="go_to_this_artist">Go to this artist</string>
     <string name="go_to_this_album">Go to this album</string>
@@ -825,7 +825,7 @@
     <string name="title_activity_browser_sub">BrowserSubActivity</string>
     <string name="title_activity_browsser_sub_grid">BrowsserSubGridActivity</string>
     <string name="finished_scanning_album_art">Finished scanning for album art.</string>
-    <string name="scanning_for_album_art_details">Jams will continue scanning for album art in the background. You\'ll be notified once this process is done. To view its progress, swipe down your notification drawer.</string>
+    <string name="scanning_for_album_art_details">Genesis Music will continue scanning for album art in the background. You\'ll be notified once this process is done. To view its progress, swipe down your notification drawer.</string>
     <string name="up">Up</string>
     <string name="add">Add</string>
     <string name="cant_play_this_file">Can\'t play this file.</string>

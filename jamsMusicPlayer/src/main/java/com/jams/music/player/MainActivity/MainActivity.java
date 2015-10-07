@@ -382,7 +382,7 @@ public class MainActivity extends FragmentActivity {
         if (actionBarTitleId > 0) {
             TextView title = (TextView) findViewById(actionBarTitleId);
             if (title != null) {
-                title.setTextColor(0xFFFFFFFF);
+                title.setTextColor(0x00FFFFFF);
             }
 
         }

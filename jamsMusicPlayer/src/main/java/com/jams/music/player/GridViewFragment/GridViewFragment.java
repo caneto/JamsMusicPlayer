@@ -106,7 +106,7 @@ public class GridViewFragment extends Fragment {
         if (mApp.isPhoneInLandscape() || mApp.isTabletInLandscape()) {
             mGridView.setNumColumns(4);
         } else if (mApp.isPhoneInPortrait()) {
-            mGridView.setNumColumns(2);
+            mGridView.setNumColumns(3);//Test only, 2
         } else if (mApp.isTabletInPortrait()) {
             mGridView.setNumColumns(3);
         }

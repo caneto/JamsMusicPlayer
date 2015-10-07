@@ -106,8 +106,8 @@ public class GridViewCardsAdapter extends SimpleCursorAdapter implements Scrolla
             mHeight = mWidth + (mWidth/5);
         } else {
             //2 column layout.
-            mWidth = (metrics.widthPixels)/2;
-            mHeight = mWidth + (mWidth/3);
+            mWidth = (metrics.widthPixels)/3;
+            mHeight = mWidth + (mWidth/4);
         }
 
     }
@@ -161,7 +161,9 @@ public class GridViewCardsAdapter extends SimpleCursorAdapter implements Scrolla
             mHolder.subText.setTypeface(TypefaceHelper.getTypeface(mContext, "Roboto-Regular"));
 			
 	        mHolder.gridViewArt.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            mHolder.gridViewArt.setImageResource(UIElementsHelper.getEmptyColorPatch(mContext));
+            mHolder.gridViewArt.setImageDrawable(mContext.getResources().getDrawable(R.drawable.headphones));
+			//mHolder.gridViewArt.setImageResource(R.drawable.ic_launcher);
+
             //mHolder.textLayout.setBackgroundColor(UIElementsHelper.getGridViewBackground(mContext));
             //mHolder.overflowButton.setBackgroundColor(UIElementsHelper.getGridViewBackground(mContext));
             mHolder.titleText.setTextColor(UIElementsHelper.getThemeBasedTextColor(mContext));
@@ -169,10 +171,14 @@ public class GridViewCardsAdapter extends SimpleCursorAdapter implements Scrolla
 
             //Apply the ImageView's dimensions.
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mHolder.gridViewArt.getLayoutParams();
-            params.width = mWidth;
+			params.width = mWidth;
             params.height = mWidth;
-            mHolder.gridViewArt.setLayoutParams(params);
+			mHolder.gridViewArt.setLayoutParams(params);
 
+			ViewGroup.LayoutParams paramsRoot = convertView.getLayoutParams();
+			paramsRoot.width = mWidth;
+			paramsRoot.height = mWidth + 200;
+			convertView.setLayoutParams(paramsRoot);
             //Apply the card's background.
             mHolder.background.setBackgroundResource(UIElementsHelper.getGridViewCardBackground(mContext));
 			
