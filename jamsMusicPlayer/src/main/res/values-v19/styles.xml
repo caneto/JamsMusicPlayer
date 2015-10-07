@@ -21,17 +21,8 @@
         All customizations that are NOT specific to a particular API-level can go here.
     </style> -->
     
-    <style name="AppTheme" parent="android:Theme.Holo">
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_apptheme</item>
-        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Apptheme</item>
-        <item name="android:actionDropDownStyle">@style/DropDownNav.Apptheme</item>
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.Apptheme</item>
-        <item name="android:actionModeBackground">@drawable/cab_background_top_apptheme</item>
-        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_apptheme</item>
-        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Apptheme</item>
-        <item name="android:windowTranslucentStatus">true</item>
-		<item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowContentOverlay">@drawable/ab_solid_shadow_holo</item>
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="android:windowActionBar">false</item>
     </style>
 
     <style name="NowPlayingTheme" parent="android:Theme.Holo.NoActionBar.TranslucentDecor">
@@ -136,7 +127,7 @@
     </style>
   	
 	<!-- Application Theme (Light) -->
-	<style name="AppThemeLight" parent="@android:style/Theme.Holo.Light">
+	<style name="AppThemeLight" parent="Theme.AppCompat">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_apptheme</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Apptheme</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Apptheme</item>
@@ -147,7 +138,7 @@
         <item name="android:windowTranslucentStatus">true</item>
 		<item name="android:windowTranslucentNavigation">true</item>
 		<item name="android:windowContentOverlay">@drawable/ab_solid_shadow_holo</item>
-
+        <item name="android:windowActionBar">false</item>
     </style>
 
     <!-- Settings theme -->

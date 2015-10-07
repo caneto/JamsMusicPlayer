@@ -15,9 +15,7 @@
  */
 package com.jams.music.player.MainActivity;
 
-import java.util.List;
 import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,6 +39,8 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 
 import com.jams.music.player.Drawers.NavigationDrawerFragment;
 import com.jams.music.player.Drawers.QueueDrawerFragment;
@@ -51,7 +51,7 @@ import com.jams.music.player.ListViewFragment.ListViewFragment;
 import com.jams.music.player.R;
 import com.jams.music.player.Utils.Common;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
 	//Context and Common object(s).
 	private Context mContext;
@@ -95,9 +95,14 @@ public class MainActivity extends FragmentActivity {
 		setTheme();
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
+		// As we're using a Toolbar, we should retrieve it and set it
+		// to be our ActionBar
+		Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+		//setSupportActionBar(toolbar);
+
         //Init the UI elements.
-        mDrawerParentLayout = (FrameLayout) findViewById(R.id.main_activity_root);
+        //mDrawerParentLayout = (FrameLayout) findViewById(R.id.main_activity_root);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_activity_drawer_root);
         mNavDrawerLayout = (RelativeLayout) findViewById(R.id.nav_drawer_container);
         mCurrentQueueDrawerLayout = (RelativeLayout) findViewById(R.id.current_queue_drawer_container);
@@ -170,9 +175,9 @@ public class MainActivity extends FragmentActivity {
 	private void setTheme() {
     	//Set the UI theme.
     	if (mApp.getCurrentTheme()==Common.DARK_THEME) {
-    		setTheme(R.style.AppTheme);
+    		//setTheme(R.style.AppTheme);
     	} else {
-    		setTheme(R.style.AppThemeLight);
+    		//setTheme(R.style.AppThemeLight);
     	}
     	
 	}
@@ -202,11 +207,6 @@ public class MainActivity extends FragmentActivity {
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
             }
 
-            if (mDrawerParentLayout!=null) {
-            	mDrawerParentLayout.setPadding(0, actionBarHeight, 0, 0);
-            	mDrawerParentLayout.setClipToPadding(false);
-            }
-            
         }
         
 	}

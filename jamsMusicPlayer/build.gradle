@@ -65,4 +65,5 @@ dependencies {
     //compile 'com.google.android.gms:play-services:+'
     compile files('libs/libGoogleAnalyticsServices.jar')
     compile files('libs/google-play-services.jar')
+    compile 'com.android.support:appcompat-v7:23.0.1'
 }
