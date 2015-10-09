@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -385,8 +386,13 @@ public class GridViewFragment extends Fragment {
         super.onResume();
 
         //Apply the ActionBar title.
-        getActivity().getActionBar().setTitle(mFragmentTitle);
 
+        if(getActivity() instanceof AppCompatActivity)
+        {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mFragmentTitle);
+        }else{
+            getActivity().getActionBar().setTitle(mFragmentTitle);
+        }
     }
 
     /*

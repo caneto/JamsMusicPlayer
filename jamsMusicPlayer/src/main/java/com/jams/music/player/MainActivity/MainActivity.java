@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
 	public static final int GRID_LAYOUT = 1;
 
 	private String[] navMenuTitles;
+
+	Toolbar toolbar;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -92,14 +94,14 @@ public class MainActivity extends AppCompatActivity {
         mApp = (Common) getApplicationContext();
         
         //Set the theme and inflate the layout.
-		setTheme();
+		//setTheme();
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 		// As we're using a Toolbar, we should retrieve it and set it
 		// to be our ActionBar
-		Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-		//setSupportActionBar(toolbar);
+		toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+		setSupportActionBar(toolbar);
 
         //Init the UI elements.
         //mDrawerParentLayout = (FrameLayout) findViewById(R.id.main_activity_root);
@@ -158,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
 
     	//Apply the drawer toggle to the DrawerLayout.
     	mDrawerLayout.setDrawerListener(mDrawerToggle);
-    	getActionBar().setDisplayHomeAsUpEnabled(true);
-    	getActionBar().setDisplayShowHomeEnabled(true);
+    	getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //Check if this is the first time the app is being started.
         if (mApp.getSharedPreferences().getBoolean(Common.FIRST_RUN, true)==true) {
@@ -320,13 +322,13 @@ public class MainActivity extends AppCompatActivity {
 	 */
 	public void switchContent(Fragment fragment) {
         // Reset action bar
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setDisplayShowHomeEnabled(true);
-        getActionBar().setDisplayShowCustomEnabled(false);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowHomeEnabled(true);
+		getSupportActionBar().setDisplayShowCustomEnabled(false);
 
 		getSupportFragmentManager().beginTransaction()
 								   .replace(R.id.mainActivityContainer, fragment)
-								   .commit();
+				.commit();
 		
 		//Close the drawer(s).
 		mDrawerLayout.closeDrawer(Gravity.START);
@@ -347,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
         mQueueDrawerFragment = new QueueDrawerFragment();
 		getSupportFragmentManager().beginTransaction()
 		   						   .replace(R.id.current_queue_drawer_container, mQueueDrawerFragment)
-		   						   .commit();
+				.commit();
 		
 	}
 
@@ -369,12 +371,12 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(R.string.scanning_for_album_art_details);
         builder.setPositiveButton(R.string.got_it, new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
 
-        });
+		});
 
         builder.create().show();
     }
@@ -392,10 +394,10 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main_activity, menu);
 
         //Set the ActionBar background
-        getActionBar().setBackgroundDrawable(UIElementsHelper.getGeneralActionBarBackground(mContext));
-        getActionBar().setDisplayShowTitleEnabled(true);
-        getActionBar().setDisplayUseLogoEnabled(false);
-        getActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setBackgroundDrawable(UIElementsHelper.getGeneralActionBarBackground(mContext));
+		getSupportActionBar().setDisplayShowTitleEnabled(true);
+		getSupportActionBar().setDisplayUseLogoEnabled(false);
+		getSupportActionBar().setHomeButtonEnabled(true);
 
         //Set the ActionBar text color.
         int actionBarTitleId = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
@@ -425,19 +427,18 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.files_folders_fragment, menu);
 
 
-        getActionBar().setDisplayShowTitleEnabled(false);
-        getActionBar().setDisplayUseLogoEnabled(false);
-        getActionBar().setDisplayShowCustomEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setLogo(0);
-        getActionBar().setIcon(0);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		getSupportActionBar().setDisplayUseLogoEnabled(false);
+		getSupportActionBar().setDisplayShowCustomEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setLogo(0);
+		getSupportActionBar().setIcon(0);
 
         if (showPaste) {
             //Change the ActionBar's background and show the Paste Here option.
             menu.findItem(R.id.action_paste).setVisible(true);
             menu.findItem(R.id.action_cancel).setVisible(true);
-            getActionBar().setBackgroundDrawable(mContext.getResources()
-                                                         .getDrawable(R.drawable.cab_background_top_apptheme));
+			getSupportActionBar().setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.cab_background_top_apptheme));
 
             //Change the KitKat system bar color.
             if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT)
@@ -447,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
             //Hide the Paste Here option and set the default ActionBar background.
             menu.findItem(R.id.action_paste).setVisible(false);
             menu.findItem(R.id.action_cancel).setVisible(false);
-            getActionBar().setBackgroundDrawable(UIElementsHelper.getGeneralActionBarBackground(mContext));
+			getSupportActionBar().setBackgroundDrawable(UIElementsHelper.getGeneralActionBarBackground(mContext));
 
             //Change the KitKat system bar color.
             if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT)
@@ -464,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
         titleText.setTextColor(0xFFFFFFFF);
 
         //Inject the custom view into the ActionBar.
-        getActionBar().setCustomView(view);
+		getSupportActionBar().setCustomView(view);
 
     }
 	
@@ -555,7 +556,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT) {
-            getActionBar().setBackgroundDrawable(UIElementsHelper.getGeneralActionBarBackground(mContext));
+			getSupportActionBar().setBackgroundDrawable(UIElementsHelper.getGeneralActionBarBackground(mContext));
             getWindow().setBackgroundDrawable(UIElementsHelper.getGeneralActionBarBackground(mContext));
         }
 

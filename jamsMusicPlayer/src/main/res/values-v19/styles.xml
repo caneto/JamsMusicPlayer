@@ -22,7 +22,8 @@
     </style> -->
     
     <style name="AppTheme" parent="Theme.AppCompat">
-        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="NowPlayingTheme" parent="android:Theme.Holo.NoActionBar.TranslucentDecor">
