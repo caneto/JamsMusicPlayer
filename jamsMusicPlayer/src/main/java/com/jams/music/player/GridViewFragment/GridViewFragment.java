@@ -385,14 +385,14 @@ public class GridViewFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        //Apply the ActionBar title.
+        //Apply the ActionBar title. Not Needed anymore since we are using tabs now.
 
-        if(getActivity() instanceof AppCompatActivity)
-        {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mFragmentTitle);
-        }else{
-            getActivity().getActionBar().setTitle(mFragmentTitle);
-        }
+//        if(getActivity() instanceof AppCompatActivity)
+//        {
+//            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mFragmentTitle);
+//        }else{
+//            getActivity().getActionBar().setTitle(mFragmentTitle);
+//        }
     }
 
     /*

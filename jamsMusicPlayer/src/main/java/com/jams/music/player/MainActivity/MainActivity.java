@@ -16,6 +16,8 @@
 package com.jams.music.player.MainActivity;
 
 import java.util.ArrayList;
+
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +28,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -50,6 +54,8 @@ import com.jams.music.player.Helpers.UIElementsHelper;
 import com.jams.music.player.ListViewFragment.ListViewFragment;
 import com.jams.music.player.R;
 import com.jams.music.player.Utils.Common;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import android.support.design.widget.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
 	private Common mApp;
 
 	//UI elements.
-	private FrameLayout mDrawerParentLayout;
-	private DrawerLayout mDrawerLayout;
-	private RelativeLayout mNavDrawerLayout;
-	private RelativeLayout mCurrentQueueDrawerLayout;
-	private ActionBarDrawerToggle mDrawerToggle;
-    private QueueDrawerFragment mQueueDrawerFragment;
+	//private FrameLayout mDrawerParentLayout;
+	//private DrawerLayout mDrawerLayout;
+	//private RelativeLayout mNavDrawerLayout;
+	//private RelativeLayout mCurrentQueueDrawerLayout;
+	//private ActionBarDrawerToggle mDrawerToggle;
+    //private QueueDrawerFragment mQueueDrawerFragment;
     private Menu mMenu;
 	
 	//Current fragment params.
@@ -84,8 +90,9 @@ public class MainActivity extends AppCompatActivity {
 	public static final int GRID_LAYOUT = 1;
 
 	private String[] navMenuTitles;
-
-	Toolbar toolbar;
+	private SlidingMenu menu;
+	private Toolbar toolbar;
+	private ViewPager viewPager;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -101,65 +108,25 @@ public class MainActivity extends AppCompatActivity {
 		// As we're using a Toolbar, we should retrieve it and set it
 		// to be our ActionBar
 		toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				menu.showMenu(true);
+			}
+		});
+
 		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayShowHomeEnabled(true);
+		getSupportActionBar().setIcon(R.drawable.icon_launcher4);
 
         //Init the UI elements.
-        //mDrawerParentLayout = (FrameLayout) findViewById(R.id.main_activity_root);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.main_activity_drawer_root);
-        mNavDrawerLayout = (RelativeLayout) findViewById(R.id.nav_drawer_container);
-        mCurrentQueueDrawerLayout = (RelativeLayout) findViewById(R.id.current_queue_drawer_container);
-
-		// load slide menu items
-		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
-		ListView navDrawerListView = (ListView)findViewById(R.id.list_drawer_Items);
-
-		ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<NavDrawerItem>();
-
-		// adding nav drawer items to array
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], 0));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], 0));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], 0));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], 0));
-
-		NavDrawerListAdapter adapter = new NavDrawerListAdapter(mContext, navDrawerItems);
-		navDrawerListView.setAdapter(adapter);
 
         //Load the drawer fragments.
-        loadDrawerFragments();
-		
-        //KitKat specific translucency.
-        applyKitKatTranslucency();
-        
+		InitializeTabPager();
+		loadDrawerFragments();
         //Load the fragment.
         loadFragment(savedInstanceState);
-        
-    	/**
-    	 * Navigation drawer toggle.
-    	 */
-    	mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 
-    			  								  R.drawable.ic_navigation_drawer, 
-    			  								  0, 0) {
 
-    		@Override
-    		public void onDrawerClosed(View view) {
-    			if (mQueueDrawerFragment!=null &&
-                    view==mCurrentQueueDrawerLayout)
-                    mQueueDrawerFragment.setIsDrawerOpen(false);
-    		
-    		}
-
-    		@Override
-    		public void onDrawerOpened(View view) {
-                if (mQueueDrawerFragment!=null &&
-                    view==mCurrentQueueDrawerLayout)
-                    mQueueDrawerFragment.setIsDrawerOpen(true);
-
-    		}
-
-    	};
-
-    	//Apply the drawer toggle to the DrawerLayout.
-    	mDrawerLayout.setDrawerListener(mDrawerToggle);
     	getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -170,7 +137,42 @@ public class MainActivity extends AppCompatActivity {
         }
     	
 	}
-	
+
+	private void InitializeTabPager()
+	{
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+		tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.artists)));
+		tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.album_artists)));
+		tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.albums)));
+		tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.songs)));
+		tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.playlists)));
+		tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.genres)));
+		tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.folders)));
+		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+		tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(),mContext,mApp);
+		viewPager.setAdapter(adapter);
+		viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+		tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab tab) {
+				viewPager.setCurrentItem(tab.getPosition());
+			}
+
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
+
+			}
+
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) {
+
+			}
+		});
+	}
 	/**
 	 * Sets the entire activity-wide theme.
 	 */
@@ -183,36 +185,7 @@ public class MainActivity extends AppCompatActivity {
     	}
     	
 	}
-	
-	/**
-	 * Apply KitKat specific translucency.
-	 */
-	private void applyKitKatTranslucency() {
-		
-		//KitKat translucent navigation/status bar.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-        	//Set the window background.
-        	getWindow().setBackgroundDrawable(UIElementsHelper.getGeneralActionBarBackground(mContext));
-        	
-    		int topPadding = Common.getStatusBarHeight(mContext);
-    		if (mDrawerLayout!=null) {
-    			mDrawerLayout.setPadding(0, topPadding, 0, 0);
-    			mNavDrawerLayout.setPadding(0, topPadding, 0, 0);
-    			mCurrentQueueDrawerLayout.setPadding(0, topPadding, 0, 0);
-    		}
-
-            //Calculate ActionBar and navigation bar height.
-            TypedValue tv = new TypedValue();
-            int actionBarHeight = 0;
-            if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-            }
-
-        }
-        
-	}
-	
 	/**
 	 * Loads the correct fragment based on the selected browser.
 	 */
@@ -220,119 +193,63 @@ public class MainActivity extends AppCompatActivity {
 		//Get the target fragment from savedInstanceState if it's not null (orientation changes?).
 		if (savedInstanceState!=null) {
 			mCurrentFragmentId = savedInstanceState.getInt(CURRENT_FRAGMENT);
-            invalidateOptionsMenu();
+			invalidateOptionsMenu();
 			
 		} else {
 			//Set the current fragment based on the intent's extras.
     		if (getIntent().hasExtra(CURRENT_FRAGMENT)) {
     			mCurrentFragmentId = getIntent().getExtras().getInt(CURRENT_FRAGMENT);
     		}
-    		
+
+			int tabPossition = 0;
     		switch (mCurrentFragmentId) {
     		case Common.ARTISTS_FRAGMENT:
-    			mCurrentFragment = getLayoutFragment(Common.ARTISTS_FRAGMENT);
+//    			mCurrentFragment = getLayoutFragment(Common.ARTISTS_FRAGMENT);
+				tabPossition = 0;
     			break;
     		case Common.ALBUM_ARTISTS_FRAGMENT:
-    			mCurrentFragment = getLayoutFragment(Common.ALBUM_ARTISTS_FRAGMENT);
+//    			mCurrentFragment = getLayoutFragment(Common.ALBUM_ARTISTS_FRAGMENT);
+				tabPossition = 1;
     			break;
     		case Common.ALBUMS_FRAGMENT:
-    			mCurrentFragment = getLayoutFragment(Common.ALBUMS_FRAGMENT);
-    			break;
+//    			mCurrentFragment = getLayoutFragment(Common.ALBUMS_FRAGMENT);
+				tabPossition = 2;
+				break;
     		case Common.SONGS_FRAGMENT:
-    			mCurrentFragment = getLayoutFragment(Common.SONGS_FRAGMENT);
+//    			mCurrentFragment = getLayoutFragment(Common.SONGS_FRAGMENT);
+				tabPossition = 3;
     			break;
     		case Common.PLAYLISTS_FRAGMENT:
-    			mCurrentFragment = getLayoutFragment(Common.PLAYLISTS_FRAGMENT);
-    			break;
+//    			mCurrentFragment = getLayoutFragment(Common.PLAYLISTS_FRAGMENT);
+				tabPossition = 4;
+				break;
     		case Common.GENRES_FRAGMENT:
-    			mCurrentFragment = getLayoutFragment(Common.GENRES_FRAGMENT);
-    			break;
+//    			mCurrentFragment = getLayoutFragment(Common.GENRES_FRAGMENT);
+				tabPossition = 5;
+				break;
     		case Common.FOLDERS_FRAGMENT:
-    			mCurrentFragment = new FilesFoldersFragment();
-    			break;
-    		}
-    		
-    		switchContent(mCurrentFragment);
+//    			mCurrentFragment = new FilesFoldersFragment();
+				tabPossition = 6;
+				break;
+			}
+
+			switchContent(tabPossition);
 		}
 		
 	}
-	
-	/**
-	 * Retrieves the correct fragment based on the saved layout preference.
-	 */
-	private Fragment getLayoutFragment(int fragmentId) {
-		
-		//Instantiate a new bundle.
-		Fragment fragment = null;
-		Bundle bundle = new Bundle();
-		
-		//Retrieve layout preferences for the current fragment.
-		switch (fragmentId) {
-		case Common.ARTISTS_FRAGMENT:
-			mCurrentFragmentLayout = mApp.getSharedPreferences().getInt(ARTISTS_FRAGMENT_LAYOUT, GRID_LAYOUT);
-			bundle.putInt(Common.FRAGMENT_ID, Common.ARTISTS_FRAGMENT);
-            bundle.putString(FRAGMENT_HEADER, mContext.getResources().getString(R.string.artists));
-			break;
-		case Common.ALBUM_ARTISTS_FRAGMENT:
-			mCurrentFragmentLayout = mApp.getSharedPreferences().getInt(ALBUM_ARTISTS_FRAGMENT_LAYOUT, GRID_LAYOUT);
-			bundle.putInt(Common.FRAGMENT_ID, Common.ALBUM_ARTISTS_FRAGMENT);
-            bundle.putString(FRAGMENT_HEADER, mContext.getResources().getString(R.string.album_artists));
-			break;
-		case Common.ALBUMS_FRAGMENT:
-			mCurrentFragmentLayout = mApp.getSharedPreferences().getInt(ALBUMS_FRAGMENT_LAYOUT, GRID_LAYOUT);
-			bundle.putInt(Common.FRAGMENT_ID, Common.ALBUMS_FRAGMENT);
-            bundle.putString(FRAGMENT_HEADER, mContext.getResources().getString(R.string.albums));
-			break;
-		case Common.SONGS_FRAGMENT:
-			mCurrentFragmentLayout = LIST_LAYOUT;
-			bundle.putInt(Common.FRAGMENT_ID, Common.SONGS_FRAGMENT);
-            bundle.putString(FRAGMENT_HEADER, mContext.getResources().getString(R.string.songs));
-			break;
-		case Common.PLAYLISTS_FRAGMENT:
-			mCurrentFragmentLayout = mApp.getSharedPreferences().getInt(PLAYLISTS_FRAGMENT_LAYOUT, LIST_LAYOUT);
-			bundle.putInt(Common.FRAGMENT_ID, Common.PLAYLISTS_FRAGMENT);
-            bundle.putString(FRAGMENT_HEADER, mContext.getResources().getString(R.string.playlists));
-			break;
-		case Common.GENRES_FRAGMENT:
-			mCurrentFragmentLayout = mApp.getSharedPreferences().getInt(GENRES_FRAGMENT_LAYOUT, GRID_LAYOUT);
-			bundle.putInt(Common.FRAGMENT_ID, Common.GENRES_FRAGMENT);
-            bundle.putString(FRAGMENT_HEADER, mContext.getResources().getString(R.string.genres));
-			break;
-		case Common.FOLDERS_FRAGMENT:
-			mCurrentFragmentLayout = mApp.getSharedPreferences().getInt(FOLDERS_FRAGMENT_LAYOUT, LIST_LAYOUT);
-			bundle.putInt(Common.FRAGMENT_ID, Common.FOLDERS_FRAGMENT);
-            bundle.putString(FRAGMENT_HEADER, mContext.getResources().getString(R.string.folders));
-			break;
-		}		
-				
-		//Return the correct layout fragment.
-		if (mCurrentFragmentLayout==GRID_LAYOUT) {
-			fragment = new GridViewFragment();
-			fragment.setArguments(bundle);
-		} else {
-			fragment = new ListViewFragment();
-			fragment.setArguments(bundle);
-		}
-		
-		return fragment;
-	}
-	
+
 	/**
 	 * Loads the specified fragment into the target layout.
 	 */
-	public void switchContent(Fragment fragment) {
+	public void switchContent(int tabPossition) {
         // Reset action bar
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 		getSupportActionBar().setDisplayShowCustomEnabled(false);
 
-		getSupportFragmentManager().beginTransaction()
-								   .replace(R.id.mainActivityContainer, fragment)
-				.commit();
-		
-		//Close the drawer(s).
-		mDrawerLayout.closeDrawer(Gravity.START);
-        invalidateOptionsMenu();
+		if(menu.isMenuShowing()) menu.toggle(true);
+		viewPager.setCurrentItem(tabPossition);
+		invalidateOptionsMenu();
 
 	}
 	
@@ -340,17 +257,29 @@ public class MainActivity extends AppCompatActivity {
 	 * Loads the drawer fragments.
 	 */
 	private void loadDrawerFragments() {
+
+		// configure the SlidingMenu
+		menu = new SlidingMenu(this);
+		menu.setMode(SlidingMenu.LEFT);
+		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		menu.setShadowWidthRes(R.dimen.shadow_width);
+		menu.setShadowDrawable(R.drawable.shadow);
+		menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+		menu.setFadeDegree(0.35f);
+		menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+		menu.setMenu(R.layout.menu);
+
 		//Load the navigation drawer.
-		getSupportFragmentManager().beginTransaction()
-		   						   .replace(R.id.nav_drawer_container, new NavigationDrawerFragment())
-		   						   .commit();
-		
-		//Load the current queue drawer.
-        mQueueDrawerFragment = new QueueDrawerFragment();
-		getSupportFragmentManager().beginTransaction()
-		   						   .replace(R.id.current_queue_drawer_container, mQueueDrawerFragment)
-				.commit();
-		
+//		getSupportFragmentManager().beginTransaction()
+//		   						   .replace(R.id.nav_drawer_container, new NavigationDrawerFragment())
+//		   						   .commit();
+//
+//		//Load the current queue drawer.
+//        mQueueDrawerFragment = new QueueDrawerFragment();
+//		getSupportFragmentManager().beginTransaction()
+//		   						   .replace(R.id.current_queue_drawer_container, mQueueDrawerFragment)
+//				.commit();
+//
 	}
 
 	/**
@@ -418,10 +347,10 @@ public class MainActivity extends AppCompatActivity {
      * @param inflater The ActionBar's menu inflater.
      * @param menu The ActionBar menu to work with.
      * @param showPaste Pass true if the ActionBar is being updated for a copy/move operation.
-     */
+	 */
     public void showFolderFragmentActionItems(String filePath,
-                                              MenuInflater inflater,
-                                              Menu menu,
+											  MenuInflater inflater,
+											  Menu menu,
                                               boolean showPaste) {
         getMenu().clear();
         inflater.inflate(R.menu.files_folders_fragment, menu);
@@ -490,23 +419,24 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-	    }
+//		if (mDrawerToggle.onOptionsItemSelected(item)) {
+//			return true;
+//	    }
 		
 		switch (item.getItemId()) {
 		case R.id.action_search:
-			//ArtistsFragment.showSearch();
+//			ArtistsFragment.showSearch();
 			return true;
 	    case R.id.action_queue_drawer:
-	    	if (mDrawerLayout!=null && mCurrentQueueDrawerLayout!=null) {
-		    	if (mDrawerLayout.isDrawerOpen(mCurrentQueueDrawerLayout)) {
-		    		mDrawerLayout.closeDrawer(mCurrentQueueDrawerLayout);
-		    	} else {
-		    		mDrawerLayout.openDrawer(mCurrentQueueDrawerLayout);
-		    	}
-		    	
-	    	}
+			menu.toggle(true);
+//	    	if (mDrawerLayout!=null && mCurrentQueueDrawerLayout!=null) {
+//		    	if (mDrawerLayout.isDrawerOpen(mCurrentQueueDrawerLayout)) {
+//		    		mDrawerLayout.closeDrawer(mCurrentQueueDrawerLayout);
+//		    	} else {
+//		    		mDrawerLayout.openDrawer(mCurrentQueueDrawerLayout);
+//		    	}
+//
+//	    	}
 	    	return true;
         case R.id.action_up:
             ((FilesFoldersFragment) mCurrentFragment).getParentDir();
@@ -531,16 +461,16 @@ public class MainActivity extends AppCompatActivity {
 	@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
+//        mDrawerToggle.syncState();
     }
 
     @Override
     public void onBackPressed() {
 
-        if(mDrawerLayout.isDrawerOpen(Gravity.START)) { // Close left drawer if opened
-            mDrawerLayout.closeDrawer(Gravity.START);
-
-        } else if (getCurrentFragmentId()==Common.FOLDERS_FRAGMENT) {
+        if(menu.isMenuShowing()) { // Close left drawer if opened
+            menu.toggle(true);
+        } else
+		if (getCurrentFragmentId()==Common.FOLDERS_FRAGMENT) {
             if (((FilesFoldersFragment) mCurrentFragment).getCurrentDir().equals("/"))
                 super.onBackPressed();
             else

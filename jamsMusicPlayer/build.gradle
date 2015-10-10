@@ -67,4 +67,5 @@ dependencies {
     compile files('libs/google-play-services.jar')
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile project(':SlidingMenu')
+    compile 'com.android.support:design:23.0.1'
 }

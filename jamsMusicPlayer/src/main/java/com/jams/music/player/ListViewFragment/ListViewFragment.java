@@ -421,14 +421,13 @@ public class ListViewFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        //Set the ActionBar title.
-		if(getActivity() instanceof AppCompatActivity)
-		{
-			((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mFragmentTitle);
-		}else{
-			getActivity().getActionBar().setTitle(mFragmentTitle);
-		}
-
+        //Set the ActionBar title. Not needed anymore since we are using tabs now.
+//		if(getActivity() instanceof AppCompatActivity)
+//		{
+//			((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mFragmentTitle);
+//		}else{
+//			getActivity().getActionBar().setTitle(mFragmentTitle);
+//		}
     }
 
     /*
